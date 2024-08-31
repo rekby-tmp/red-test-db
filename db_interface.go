@@ -6,6 +6,7 @@ type DB interface {
 	CreateUsers(users []User) error
 	Login(userID int64)
 	ClickInviteFeferals(userID int64) error
+	CompleteTask(userID, taskID int64) error
 }
 
 type User struct {
@@ -21,4 +22,9 @@ type User struct {
 	InvitedReferals int64
 	RaffleRules     int64
 	InviteCopy      int64
+}
+
+type Task struct {
+	ID   int64
+	Name string
 }

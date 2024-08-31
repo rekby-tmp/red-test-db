@@ -8,14 +8,14 @@ import (
 
 func generateUsers(seed uint64, count int) []User {
 	users := make([]User, count)
-	usersID := generateUserIDs(seed, count)
-	for index, id := range usersID {
-		users[index] = generateUser(id)
+	usersID := generateIDs(seed, count)
+	for i, id := range usersID {
+		users[i] = generateUser(id)
 	}
 	return users
 }
 
-func generateUserIDs(seed uint64, count int) []int64 {
+func generateIDs(seed uint64, count int) []int64 {
 	rnd := rand.New(rand.NewPCG(seed, seed))
 	res := make([]int64, count)
 	for i := range res {
@@ -26,8 +26,8 @@ func generateUserIDs(seed uint64, count int) []int64 {
 
 func generateUser(id int64) (res User) {
 	pcg := rand.NewPCG(uint64(id), uint64(id))
-
 	rnd := rand.New(pcg)
+
 	res.ID = id
 	res.Token = genString(rnd, 30, 30)
 	res.Referal = rnd.Int64N(1000)
@@ -39,6 +39,24 @@ func generateUser(id int64) (res User) {
 	res.InvitedReferals = rnd.Int64N(100)
 	res.RaffleRules = rnd.Int64N(100)
 	res.InviteCopy = rnd.Int64N(1000)
+	return res
+}
+
+func generateTasks(seed uint64, count int) []Task {
+	tasks := make([]Task, count)
+	ids := generateIDs(seed, count)
+	for i, id := range ids {
+		tasks[i] = generateTask(id)
+	}
+	return tasks
+}
+
+func generateTask(id int64) (res Task) {
+	pcg := rand.NewPCG(uint64(id), uint64(id))
+	rnd := rand.New(pcg)
+
+	res.ID = id
+	res.Name = genString(rnd, 10, 20)
 	return res
 }
 
