@@ -2,6 +2,8 @@ package main
 
 import (
 	"math/rand/v2"
+	"red-db-test/database"
+	"red-db-test/utils"
 	"slices"
 	"sync"
 	"sync/atomic"
@@ -9,8 +11,8 @@ import (
 )
 
 func BenchmarkFind(b *testing.B) {
-	token := genString(rand.New(rand.NewPCG(333, 524)), 30, 30)
-	users := generateUsers(123, 1000000)
+	token := utils.genString(rand.New(rand.NewPCG(333, 524)), 30, 30)
+	users := utils.generateUsers(123, 1000000)
 	b.ResetTimer()
 	var res atomic.Int64
 	var wg sync.WaitGroup
@@ -20,7 +22,7 @@ func BenchmarkFind(b *testing.B) {
 			defer wg.Done()
 
 			for range b.N {
-				res.Add(int64(slices.IndexFunc(users, func(user User) bool {
+				res.Add(int64(slices.IndexFunc(users, func(user database.User) bool {
 					return user.Token == token
 				})))
 			}

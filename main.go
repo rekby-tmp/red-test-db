@@ -1,21 +1,11 @@
+/*
+Copyright © 2024 NAME HERE <EMAIL ADDRESS>
+*/
 package main
 
-import "fmt"
+import "red-db-test/cmd"
 
 func main() {
-	db := must(NewRediDB("localhost", 5001, "root", "root", "anton"))
-	user := generateUser(123)
-	must0(db.CreateUser(user))
-	fmt.Println(db)
-}
 
-func must0(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
-func must[R any](res R, err error) R {
-	must0(err)
-	return res
+	cmd.Execute()
 }

@@ -1,21 +1,22 @@
-package main
+package utils
 
 import (
 	"math/rand/v2"
+	"red-db-test/database"
 	"strings"
 	"time"
 )
 
-func generateUsers(seed uint64, count int) []User {
-	users := make([]User, count)
-	usersID := generateIDs(seed, count)
+func GenerateUsers(seed uint64, count int) []database.User {
+	users := make([]database.User, count)
+	usersID := GenerateIDs(seed, count)
 	for i, id := range usersID {
 		users[i] = generateUser(id)
 	}
 	return users
 }
 
-func generateIDs(seed uint64, count int) []int64 {
+func GenerateIDs(seed uint64, count int) []int64 {
 	rnd := rand.New(rand.NewPCG(seed, seed))
 	res := make([]int64, count)
 	for i := range res {
@@ -24,7 +25,7 @@ func generateIDs(seed uint64, count int) []int64 {
 	return res
 }
 
-func generateUser(id int64) (res User) {
+func generateUser(id int64) (res database.User) {
 	pcg := rand.NewPCG(uint64(id), uint64(id))
 	rnd := rand.New(pcg)
 
@@ -42,16 +43,16 @@ func generateUser(id int64) (res User) {
 	return res
 }
 
-func generateTasks(seed uint64, count int) []Task {
-	tasks := make([]Task, count)
-	ids := generateIDs(seed, count)
+func GenerateTasks(seed uint64, count int) []database.Task {
+	tasks := make([]database.Task, count)
+	ids := GenerateIDs(seed, count)
 	for i, id := range ids {
 		tasks[i] = generateTask(id)
 	}
 	return tasks
 }
 
-func generateTask(id int64) (res Task) {
+func generateTask(id int64) (res database.Task) {
 	pcg := rand.NewPCG(uint64(id), uint64(id))
 	rnd := rand.New(pcg)
 

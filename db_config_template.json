@@ -1,0 +1,18 @@
+{
+  "Database": {
+    "RediDB": {
+      "Host": "",
+      "Port": 0,
+      "Login": "",
+      "Password": "",
+      "Database": ""
+    }
+  },
+  "Test": {
+    "InitialUserCount": 1000000,
+    "OkLoginPerSecond": 100,
+    "FailedLoginPerSecond": 10,
+    "TaskCompletedPerSecond": 100,
+    "ClickPerSecond": 100
+  }
+}

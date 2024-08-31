@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"errors"
@@ -34,6 +34,10 @@ func NewRediDB(host string, port int, login, password, database string) (*RediDB
 		return nil, err
 	}
 	return db, nil
+}
+
+func (r *RediDB) CreateTables() error {
+	return nil
 }
 
 func (r *RediDB) UploadUsers(users []User) error {

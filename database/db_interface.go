@@ -1,8 +1,10 @@
-package main
+package database
 
 import "time"
 
 type DB interface {
+	CreateTables() error
+
 	UploadUsers(users []User) error
 	CreateUser(user User) error
 	CreateTask(task Task) error
