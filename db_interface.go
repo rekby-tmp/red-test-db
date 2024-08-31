@@ -3,8 +3,10 @@ package main
 import "time"
 
 type DB interface {
-	CreateUsers(users []User) error
-	Login(userID int64)
+	UploadUsers(users []User) error
+	CreateUser(user User) error
+	CreateTask(task Task) error
+	Login(userID int64, token string) error
 	ClickInviteFeferals(userID int64) error
 	CompleteTask(userID, taskID int64) error
 }
