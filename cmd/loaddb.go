@@ -8,22 +8,21 @@ import (
 	"log"
 	"math/rand/v2"
 	"red-db-test/utils"
-	"sync/atomic"
 	"time"
 )
 
 var (
 	okLoginRPS     = 100
-	okLoginCounter atomic.Int64
+	okLoginCounter utils.LatencyMetric
 
 	badLoginRPS     = 100
-	badLoginCounter atomic.Int64
+	badLoginCounter utils.LatencyMetric
 
 	commitTaskRPS     = 100
-	commitTaskCounter atomic.Int64
+	commitTaskCounter utils.LatencyMetric
 
 	clickInviteRPS     = 100
-	clickInviteCounter atomic.Int64
+	clickInviteCounter utils.LatencyMetric
 )
 
 // loaddbCmd represents the loaddb command
@@ -40,10 +39,10 @@ var loaddbCmd = &cobra.Command{
 		ticker := time.NewTicker(time.Second)
 		for {
 			<-ticker.C
-			log.Printf("ok logins rps:  %v", okLoginCounter.Swap(0))
-			log.Printf("bad logins rps: %v", badLoginCounter.Swap(0))
-			log.Printf("commit task rps: %v", commitTaskCounter.Swap(0))
-			log.Printf("click invite rps:  %v", clickInviteCounter.Swap(0))
+			printStat("ok logins", &okLoginCounter)
+			printStat("bad logins", &badLoginCounter)
+			printStat("commit task", &commitTaskCounter)
+			printStat("click invite", &clickInviteCounter)
 			log.Println()
 		}
 	},
@@ -58,11 +57,12 @@ func loadOkLogins() {
 	users := utils.GenerateUsers(usersSeed, initUsersCount)
 
 	ticker := time.NewTicker(time.Second / time.Duration(okLoginRPS))
-	rnd := rand.New(rand.NewPCG(1, 2))
+	rnd := rand.New(rand.NewPCG(304, 1341))
 	for {
 		<-ticker.C
 		go func(index int) {
-			defer okLoginCounter.Add(1)
+			start := time.Now()
+			okLoginCounter.AddSince(start)
 
 			user := &users[index]
 
@@ -81,11 +81,12 @@ func loadBadLogins() {
 	users := utils.GenerateUsers(usersSeed, initUsersCount)
 
 	ticker := time.NewTicker(time.Second / time.Duration(badLoginRPS))
-	rnd := rand.New(rand.NewPCG(1, 2))
+	rnd := rand.New(rand.NewPCG(534, 134))
 	for {
 		<-ticker.C
 		go func(index int) {
-			defer badLoginCounter.Add(1)
+			start := time.Now()
+			badLoginCounter.AddSince(start)
 
 			user := &users[index]
 
@@ -106,11 +107,12 @@ func loadCommitTasks() {
 	tasks := utils.GenerateTasks(tasksSeed, initTaskCount)
 
 	ticker := time.NewTicker(time.Second / time.Duration(badLoginRPS))
-	rnd := rand.New(rand.NewPCG(1, 2))
+	rnd := rand.New(rand.NewPCG(415, 3133))
 	for {
 		<-ticker.C
 		go func(userIndex, taskIndex int) {
-			defer commitTaskCounter.Add(1)
+			start := time.Now()
+			commitTaskCounter.AddSince(start)
 
 			user := &users[userIndex]
 			task := &tasks[taskIndex]
@@ -131,11 +133,12 @@ func loadClickInvite() {
 	users := utils.GenerateUsers(usersSeed, initUsersCount)
 
 	ticker := time.NewTicker(time.Second / time.Duration(okLoginRPS))
-	rnd := rand.New(rand.NewPCG(1, 2))
+	rnd := rand.New(rand.NewPCG(332, 231))
 	for {
 		<-ticker.C
 		go func(index int) {
-			defer clickInviteCounter.Add(1)
+			start := time.Now()
+			clickInviteCounter.AddSince(start)
 
 			user := &users[index]
 
@@ -158,4 +161,16 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// loaddbCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func printStat(mess string, m *utils.LatencyMetric) {
+	stat := m.Stat(0.5, 0.9, 0.99, 1.0)
+	log.Printf(
+		mess+": 0.5 (%v), 0.9 (%v), 0.99 (%v), 1.0 (%v), Total Count: %v",
+		stat.Durations[0],
+		stat.Durations[1],
+		stat.Durations[2],
+		stat.Durations[3],
+		stat.TotalCount,
+	)
 }
