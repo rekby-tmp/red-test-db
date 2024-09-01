@@ -82,11 +82,21 @@ func (m *MongoDB) CreateTask(task model.Task) error {
 }
 
 func (m *MongoDB) Login(userID int64, token string) error {
-	res := m.usersCollection.FindOne(context.Background(), bson.D{
-		{"_id", strconv.FormatInt(userID, 10)},
-		{"token", token},
-	})
-	return res.Err()
+	res, err := m.usersCollection.UpdateOne(
+		context.Background(),
+		bson.D{
+			{"_id", strconv.FormatInt(userID, 10)},
+			{"token", token},
+		},
+		bson.D{{"$set", bson.D{{"lastlogin", time.Now().UnixMicro()}}}},
+	)
+	if err != nil {
+		return err
+	}
+	if res.ModifiedCount == 0 {
+		return errors.New("login failed - unknow id or token")
+	}
+	return nil
 }
 
 func (m *MongoDB) ClickInviteFeferals(userID int64) error {
