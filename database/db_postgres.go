@@ -4,16 +4,17 @@ import (
 	"context"
 	"fmt"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"red-db-test/model"
 	"time"
 )
 
 type Postgres struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
 func NewPostgres(connString string) (*Postgres, error) {
-	conn, err := pgx.Connect(context.Background(), connString)
+	conn, err := pgxpool.New(context.Background(), connString)
 	if err != nil {
 		return nil, err
 	}

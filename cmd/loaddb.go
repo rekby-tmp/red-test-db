@@ -62,7 +62,7 @@ func loadOkLogins() {
 		<-ticker.C
 		go func(index int) {
 			start := time.Now()
-			okLoginCounter.AddSince(start)
+			defer okLoginCounter.AddSince(start)
 
 			user := &users[index]
 
@@ -86,7 +86,7 @@ func loadBadLogins() {
 		<-ticker.C
 		go func(index int) {
 			start := time.Now()
-			badLoginCounter.AddSince(start)
+			defer badLoginCounter.AddSince(start)
 
 			user := &users[index]
 
@@ -112,7 +112,7 @@ func loadCommitTasks() {
 		<-ticker.C
 		go func(userIndex, taskIndex int) {
 			start := time.Now()
-			commitTaskCounter.AddSince(start)
+			defer commitTaskCounter.AddSince(start)
 
 			user := &users[userIndex]
 			task := &tasks[taskIndex]
@@ -138,7 +138,7 @@ func loadClickInvite() {
 		<-ticker.C
 		go func(index int) {
 			start := time.Now()
-			clickInviteCounter.AddSince(start)
+			defer clickInviteCounter.AddSince(start)
 
 			user := &users[index]
 
