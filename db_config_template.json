@@ -16,6 +16,11 @@
     },
     "Postgres": {
       "ConnectionString": ""
+    },
+    "YDB": {
+      "ConnectionString": "",
+      "Token": "",
+      "UseMetadataAuth": false
     }
   }
 }

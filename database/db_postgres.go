@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"red-db-test/model"
+	"time"
 )
 
 type Postgres struct {
@@ -136,8 +137,8 @@ INSERT INTO tasks (id, name) VALUES (@id, @name)
 func (p *Postgres) Login(userID int64, token string) error {
 	row := p.db.QueryRow(
 		context.Background(),
-		`SELECT 1 FROM users WHERE id=@id AND token=@token`,
-		pgx.NamedArgs{"id": userID, "token": token},
+		`UPDATE users SET last_login=@now WHERE id=@id AND token=@token RETURNING id`,
+		pgx.NamedArgs{"id": userID, "token": token, "now": time.Now()},
 	)
 	var res int
 	return row.Scan(&res)

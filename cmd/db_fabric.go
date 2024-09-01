@@ -18,6 +18,9 @@ func NewDB() model.DB {
 	case "Postgres":
 		cfg := utils.Config.Database.Postgres
 		return utils.Must(database.NewPostgres(cfg.ConnectionString))
+	case "YDB":
+		cfg := utils.Config.Database.YDB
+		return utils.Must(database.NewYDB(cfg.ConnectionString, cfg.Token, cfg.UseMetadataAuth))
 	default:
 		log.Fatalf("unknown db: %q", dbName)
 		return nil

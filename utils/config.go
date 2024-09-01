@@ -25,6 +25,11 @@ var Config struct {
 		Postgres struct {
 			ConnectionString string
 		}
+		YDB struct {
+			ConnectionString string
+			Token            string
+			UseMetadataAuth  bool
+		}
 	}
 }
 
