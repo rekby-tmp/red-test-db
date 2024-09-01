@@ -6,6 +6,13 @@
       "Login": "",
       "Password": "",
       "Database": ""
+    },
+    "MongoDB": {
+      "Endpoint": "host:port",
+      "AuthSource": "",
+      "Login": "",
+      "Password": "",
+      "Database": ""
     }
   },
   "Test": {

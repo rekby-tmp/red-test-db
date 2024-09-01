@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"github.com/redi-db/redi.db.go"
+	"red-db-test/model"
 )
 
 type RediDB struct {
@@ -40,7 +41,7 @@ func (r *RediDB) CreateTables() error {
 	return nil
 }
 
-func (r *RediDB) UploadUsers(users []User) error {
+func (r *RediDB) UploadUsers(users []model.User) error {
 	collection := r.redi.Database(r.database)
 	collection = collection.Collection(rediUsersCollection)
 
@@ -52,7 +53,7 @@ func (r *RediDB) UploadUsers(users []User) error {
 	return err
 }
 
-func (r *RediDB) CreateUser(user User) error {
+func (r *RediDB) CreateUser(user model.User) error {
 	collection := r.redi.Database(r.database)
 	collection = collection.Collection(rediUsersCollection)
 
@@ -60,7 +61,7 @@ func (r *RediDB) CreateUser(user User) error {
 	return err
 }
 
-func (r *RediDB) createUserData(user *User) redidb.CreateData {
+func (r *RediDB) createUserData(user *model.User) redidb.CreateData {
 	return redidb.CreateData{
 		"id":              user.ID,
 		"token":           user.Token,
@@ -76,7 +77,7 @@ func (r *RediDB) createUserData(user *User) redidb.CreateData {
 	}
 }
 
-func (r *RediDB) CreateTask(task Task) error {
+func (r *RediDB) CreateTask(task model.Task) error {
 	collection := r.redi.Database(r.database)
 	collection = collection.Collection(rediTasksCollection)
 

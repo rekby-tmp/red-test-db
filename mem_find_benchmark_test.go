@@ -2,7 +2,7 @@ package main
 
 import (
 	"math/rand/v2"
-	"red-db-test/database"
+	"red-db-test/model"
 	"red-db-test/utils"
 	"slices"
 	"sync"
@@ -22,7 +22,7 @@ func BenchmarkFind(b *testing.B) {
 			defer wg.Done()
 
 			for range b.N {
-				res.Add(int64(slices.IndexFunc(users, func(user database.User) bool {
+				res.Add(int64(slices.IndexFunc(users, func(user model.User) bool {
 					return user.Token == token
 				})))
 			}

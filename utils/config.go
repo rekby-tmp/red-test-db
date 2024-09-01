@@ -15,6 +15,13 @@ var Config struct {
 			Password string
 			Database string
 		}
+		MongoDB struct {
+			Endpoint   string
+			AuthSource string
+			Login      string
+			Password   string
+			Database   string
+		}
 	}
 }
 
