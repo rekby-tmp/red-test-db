@@ -22,6 +22,9 @@ var Config struct {
 			Password   string
 			Database   string
 		}
+		Postgres struct {
+			ConnectionString string
+		}
 	}
 }
 

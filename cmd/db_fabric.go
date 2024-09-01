@@ -15,6 +15,9 @@ func NewDB() model.DB {
 	case "MongoDB":
 		cfg := utils.Config.Database.MongoDB
 		return utils.Must(database.NewMongo(cfg.Endpoint, cfg.AuthSource, cfg.Login, cfg.Password, cfg.Database))
+	case "Postgres":
+		cfg := utils.Config.Database.Postgres
+		return utils.Must(database.NewPostgres(cfg.ConnectionString))
 	default:
 		log.Fatalf("unknown db: %q", dbName)
 		return nil
